@@ -1,0 +1,15 @@
+<configuration>
+    <conversionRule conversionWord="maskedMsg" converterClass="com.charter.tech.keycloakopa.service.MaskingConverter"/>
+    <turboFilter class="com.charter.tech.keycloakopa.service.HealthCheckTurboFilter">
+        <mdcKey>requestUri</mdcKey>
+    </turboFilter>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyyMMdd HH:mm:ss.SSS} [%X{ipAddress}] [%X{trace_id:-}] [%thread] [%X{applicationName}] [%X{httpMethod}] [%X{requestUri}] %highlight(%-5level) %logger{36} : %maskedMsg%n
+            </pattern>
+        </encoder>
+    </appender>
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>
