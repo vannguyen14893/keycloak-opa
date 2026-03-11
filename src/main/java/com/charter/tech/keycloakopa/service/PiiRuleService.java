@@ -1,21 +1,26 @@
 package com.charter.tech.keycloakopa.service;
 
+import com.charter.tech.keycloakopa.entity.PiiRule;
+import com.charter.tech.keycloakopa.repository.PiiRuleRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class PiiRuleService {
-    public static final Map<String, String> PII_RULES = new HashMap<>();
+    private final PiiRuleRepository piiRuleRepository;
 
-    public Set<String> getPiiKeysDefault() {
-        return getPiiRuleDefault().keySet();
+    @Transactional
+    public Map<String, String> getAllPiiRule() {
+        return piiRuleRepository.findAllByStatusIsTrue().collect(Collectors.toMap(PiiRule::getKey, PiiRule::getMasked));
     }
 
-    public Map<String, String> getPiiRuleDefault() {
-        PII_RULES.put("cif", "******");
-        return PII_RULES;
+    public void createPiiRule(List<PiiRule> piiRule) {
+        piiRuleRepository.saveAll(piiRule);
     }
 }

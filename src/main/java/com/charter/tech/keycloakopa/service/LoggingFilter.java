@@ -15,6 +15,7 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 @Component
@@ -31,7 +32,7 @@ public class LoggingFilter extends OncePerRequestFilter {
         filterChain.doFilter(wrappedRequest, wrappedResponse);
         try {
             String requestBody = new String(wrappedRequest.getContentAsByteArray(), request.getCharacterEncoding());
-            String responseBody = new String(wrappedResponse.getContentAsByteArray(), response.getCharacterEncoding());
+            String responseBody = new String(wrappedResponse.getContentAsByteArray(), StandardCharsets.UTF_8);
             log.info("***** REQUEST ***** : {}", requestBody.replaceAll("\\s+", ""));
             log.info("***** RESPONSE *****: {}", responseBody);
         } finally {

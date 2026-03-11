@@ -3,13 +3,12 @@ package com.charter.tech.keycloakopa.service;
 import ch.qos.logback.classic.pattern.MessageConverter;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 
-import java.util.*;
-import java.util.regex.Pattern;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MaskingConverter extends MessageConverter {
 
-    private static final Set<String> SENSITIVE_KEYS = new PiiRuleService().getPiiKeysDefault();
-    private static final Map<String, String> PII_RULE = new PiiRuleService().getPiiRuleDefault();
+    public static final Map<String, String> PII_RULES = new HashMap<>();
 
     @Override
     public String convert(ILoggingEvent event) {
@@ -69,9 +68,8 @@ public class MaskingConverter extends MessageConverter {
         result.append('"').append(keyBuf).append('"');
         result.append(':');
         result.append('"');
-        result.append(PII_RULE.get(keyBuf.toString()));
+        result.append(PII_RULES.getOrDefault(keyBuf.toString(), "****"));
         result.append('"');
-
         return new int[]{i};
     }
 
@@ -91,12 +89,12 @@ public class MaskingConverter extends MessageConverter {
             char quote = first;
             result.append(quote);
             i++;
-            result.append(PII_RULE.getOrDefault(matchedKey, "****"));
+            result.append(PII_RULES.getOrDefault(matchedKey, "****"));
             while (i < input.length() && input.charAt(i) != quote) {
                 i++;
             }
         } else {
-            result.append(PII_RULE.getOrDefault(matchedKey, "****"));
+            result.append(PII_RULES.getOrDefault(matchedKey, "****"));
             while (i < input.length() && !isDelimiter(input.charAt(i))) {
                 i++;
             }
@@ -106,7 +104,7 @@ public class MaskingConverter extends MessageConverter {
     }
 
     private String matchSensitiveKey(String input, int pos) {
-        for (String key : SENSITIVE_KEYS) {
+        for (String key : PII_RULES.keySet()) {
             if (pos + key.length() > input.length()) continue;
             boolean match = true;
             for (int k = 0; k < key.length(); k++) {

@@ -14,12 +14,11 @@ public class CaffeineCacheConfig {
     @Bean
     public CaffeineCacheManager cacheManager() {
         CaffeineCacheManager manager = new CaffeineCacheManager("piiRules");
-        manager.setCaffeine(
-                Caffeine.newBuilder()
-                        .maximumSize(500)
-                        .expireAfterWrite(10, TimeUnit.MINUTES)
-                        .recordStats()
-        );
+        Caffeine<Object, Object> objectCaffeine = Caffeine.newBuilder()
+                .maximumSize(500)
+                .expireAfterWrite(10, TimeUnit.MINUTES)
+                .recordStats();
+        manager.setCaffeine(objectCaffeine);
         return manager;
     }
 }

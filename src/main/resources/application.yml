@@ -15,8 +15,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-  cache:
-    typ
+    open-in-view: off
 server:
   port: 8081
 management:
