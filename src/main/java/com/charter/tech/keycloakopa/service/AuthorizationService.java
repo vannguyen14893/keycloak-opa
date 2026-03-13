@@ -1,6 +1,7 @@
 package com.charter.tech.keycloakopa.service;
 
 import com.charter.tech.keycloakopa.client.OpaClient;
+import com.charter.tech.keycloakopa.constans.ResponseCodeConstants;
 import com.charter.tech.keycloakopa.exception.CustomAccessDeniedException;
 import com.charter.tech.keycloakopa.repository.PermissionScopeRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +23,9 @@ public class AuthorizationService {
 
     public void authorize(String resource, String action) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null) throw new CustomAccessDeniedException("Authentication not found");
+        if (authentication == null) throw new CustomAccessDeniedException(ResponseCodeConstants.SEC_AUTH_REQUIRED);
         List<String> userRoles = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).filter(role -> role != null && role.startsWith("ROLE_")).toList();
-        if (userRoles.isEmpty()) throw new CustomAccessDeniedException("Roles not found");
+        if (userRoles.isEmpty()) throw new CustomAccessDeniedException(ResponseCodeConstants.SEC_ROLE_REQUIRED);
         Map<String, Object> request = Map.of(
                 "input", Map.of(
                         "user", Map.of(
@@ -36,7 +37,7 @@ public class AuthorizationService {
         );
         boolean allowed = opaClient.allow(request);
         if (!allowed) {
-            throw new CustomAccessDeniedException("OPA denied");
+            throw new CustomAccessDeniedException(ResponseCodeConstants.SEC_PERMISSION_DENIED);
         }
     }
 }

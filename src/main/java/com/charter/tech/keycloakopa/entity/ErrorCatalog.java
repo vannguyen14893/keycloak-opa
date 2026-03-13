@@ -6,20 +6,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "languages_detail")
+@Table(name = "error_catalog")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LanguagesDetail {
+public class ErrorCatalog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String key;
-    private String value;
-    private String description;
+    private String code;
+    private String type;
+    private Integer httpStatus;
+    private String messageKey;
     private String service;
-    @ManyToOne
-    @JoinColumn(name = "language_id")
-    private Languages languages;
-
+    private String severity;
+    private Boolean retryable;
 }

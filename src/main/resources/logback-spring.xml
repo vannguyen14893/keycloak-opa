@@ -1,6 +1,6 @@
 <configuration>
-    <conversionRule conversionWord="maskedMsg" converterClass="com.charter.tech.keycloakopa.service.MaskingConverter"/>
-    <turboFilter class="com.charter.tech.keycloakopa.service.HealthCheckTurboFilter">
+    <conversionRule conversionWord="maskedMsg" converterClass="com.charter.tech.keycloakopa.config.MaskingConverterLogConfig"/>
+    <turboFilter class="com.charter.tech.keycloakopa.config.TurboFilterLogConfig">
         <mdcKey>requestUri</mdcKey>
     </turboFilter>
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">

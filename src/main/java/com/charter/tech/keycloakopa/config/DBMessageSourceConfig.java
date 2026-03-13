@@ -1,5 +1,6 @@
 package com.charter.tech.keycloakopa.config;
 
+import com.charter.tech.keycloakopa.constans.MessageConstants;
 import org.springframework.context.support.AbstractMessageSource;
 import org.springframework.stereotype.Component;
 
@@ -32,7 +33,11 @@ public class DBMessageSourceConfig extends AbstractMessageSource {
         if (languagesDetails == null) {
             languagesDetails = LANGUAGES.get(Locale.ENGLISH.getLanguage());
         }
-        return new MessageFormat(languagesDetails.get(s), locale);
+        String message = languagesDetails.get(s);
+        if (message == null) {
+            message = languagesDetails.get(MessageConstants.SYS_KEY_MESSAGE_NOT_FOUND);
+        }
+        return new MessageFormat(message, locale);
     }
 
     /**

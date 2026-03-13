@@ -1,7 +1,9 @@
 package com.charter.tech.keycloakopa.controller;
 
 import com.charter.tech.keycloakopa.config.DBMessageSourceConfig;
-import com.charter.tech.keycloakopa.dto.ResultResponse;
+import com.charter.tech.keycloakopa.constans.MessageConstants;
+import com.charter.tech.keycloakopa.constans.ResponseCodeConstants;
+import com.charter.tech.keycloakopa.dto.SuccessResultResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,21 +16,20 @@ import org.springframework.http.ResponseEntity;
 
 public class BaseController {
     @Autowired
-    private DBMessageSourceConfig dbMessageSourceConfig;
+    DBMessageSourceConfig dbMessageSourceConfig;
     @Autowired
-    private HttpServletRequest httpServletRequest;
+    HttpServletRequest httpServletRequest;
 
     /**
      * Creates a ResponseEntity with a ResponseSuccess wrapper for single response objects.
      *
      * @param <T>      the type of response data
      * @param response the response data to be wrapped
-     * @param status   the HTTP status code as a string
      * @return ResponseEntity containing the wrapped response
      */
-    public <T> ResponseEntity<ResultResponse<T>> execute(T response, String key, String status) {
+    public <T> ResponseEntity<SuccessResultResponse<T>> execute(T response) {
         var locale = httpServletRequest.getLocale();
-        String messages = dbMessageSourceConfig.getMessages(key, null, locale);
-        return new ResponseEntity<>(new ResultResponse<>(MDC.get("trace_id"), status, messages, response), HttpStatusCode.valueOf(Integer.parseInt(status)));
+        String messages = dbMessageSourceConfig.getMessages(MessageConstants.MESSAGE_SUCCESS, null, locale);
+        return new ResponseEntity<>(new SuccessResultResponse<>(MDC.get("trace_id"), ResponseCodeConstants.CODE_SUCCESS, messages, response), HttpStatusCode.valueOf(200));
     }
 }
