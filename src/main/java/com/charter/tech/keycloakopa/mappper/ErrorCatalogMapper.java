@@ -4,16 +4,14 @@ import com.charter.tech.keycloakopa.dto.ErrorCatalogRequest;
 import com.charter.tech.keycloakopa.dto.ErrorCatalogResponse;
 import com.charter.tech.keycloakopa.entity.ErrorCatalog;
 import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(componentModel = "spring")
-public interface ErrorCatalogMapper {
+@Mapper(
+        componentModel = "spring",
+        unmappedTargetPolicy = ReportingPolicy.IGNORE
+)
+public interface ErrorCatalogMapper extends BaseMapper<ErrorCatalog, ErrorCatalogRequest, ErrorCatalogResponse> {
     ErrorCatalogMapper INSTANCE = Mappers.getMapper(ErrorCatalogMapper.class);
 
-    ErrorCatalogResponse toResponse(ErrorCatalog errorCatalog);
-
-    ErrorCatalog toEntityCreate(ErrorCatalogRequest errorCatalogRequest);
-
-    void toEntityUpdate(ErrorCatalogRequest errorCatalogRequest, @MappingTarget ErrorCatalog errorCatalog);
 }
