@@ -2,6 +2,7 @@ package com.charter.tech.keycloakopa.exception;
 
 import com.charter.tech.keycloakopa.config.DBMessageSourceConfig;
 import com.charter.tech.keycloakopa.constans.LogAttributeConstants;
+import com.charter.tech.keycloakopa.constans.MessageConstants;
 import com.charter.tech.keycloakopa.constans.ResponseCodeConstants;
 import com.charter.tech.keycloakopa.dto.ErrorResultResponse;
 import com.charter.tech.keycloakopa.dto.SuccessResultResponse;
@@ -109,7 +110,7 @@ public class CustomGlobalExceptionHandler {
     public ResponseEntity<SuccessResultResponse<Map<String, String>>> businessExceptionHandler(final BusinessExceptionHandler ex, Locale locale) {
         Map<String, ErrorCatalog> errorCatalogMap = errorCatalogService.findAllByService();
         ErrorCatalog errorCatalog = errorCatalogMap.get(ex.getCode());
-        String messages = dbMessageSourceConfig.getMessages(errorCatalog.getMessageKey(), null, locale);
+        String messages = dbMessageSourceConfig.getMessages(MessageConstants.MESSAGE_FAIL, null, locale);
         return new ResponseEntity<>(new SuccessResultResponse<>(utils.getValueLog(LogAttributeConstants.TRACE_ID), ex.getCode(), messages, Map.of("error", ex.getMessage())), HttpStatusCode.valueOf(errorCatalog.getHttpStatus()));
     }
 }

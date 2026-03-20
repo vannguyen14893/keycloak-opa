@@ -1,4 +1,3 @@
-
 spring:
   application:
     name: keycloak-spring-boot-app
@@ -16,6 +15,16 @@ spring:
     hibernate:
       ddl-auto: update
     open-in-view: off
+springdoc:
+  swagger-ui:
+    syntax-highlight:
+      theme: 'monokai'
+      activated: true
+    display-request-duration: true
+    operations-sorter: alpha
+  pre-loading-locales:
+    - en_US
+  pre-loading-enabled: true
 server:
   port: 8081
 management:

@@ -1,5 +1,6 @@
 package com.charter.tech.keycloakopa;
 
+import com.charter.tech.keycloakopa.dto.RoleResponse;
 import com.charter.tech.keycloakopa.entity.LanguagesDetail;
 import com.charter.tech.keycloakopa.service.LanguagesDetailService;
 import com.charter.tech.keycloakopa.service.PiiRuleService;
@@ -35,6 +36,8 @@ public class KeycloakOpaApplication {
         SpringApplication.run(KeycloakOpaApplication.class, args);
     }
 
+
+
     public String buildKey(String merchantId, String orderId) {
 
         if (hotKeys.contains(merchantId)) {
@@ -54,7 +57,8 @@ public class KeycloakOpaApplication {
         }
 
         PII_RULES.putAll(piiRuleService.getAllPiiRule());
-        HEALTH_URL.addAll(Set.of("/settings", "/categories"));
+        HEALTH_URL.addAll(Set.of("/settings", "/orders", "/categories"));
+
         log.info("key {}", buildKey("amazon", UUID.randomUUID().toString()));
     }
 }

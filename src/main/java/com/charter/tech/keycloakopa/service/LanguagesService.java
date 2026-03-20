@@ -1,5 +1,7 @@
 package com.charter.tech.keycloakopa.service;
 
+import com.charter.tech.keycloakopa.dto.LanguagesRequest;
+import com.charter.tech.keycloakopa.dto.LanguagesResponse;
 import com.charter.tech.keycloakopa.entity.Languages;
 import com.charter.tech.keycloakopa.repository.LanguagesRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +15,38 @@ public class LanguagesService {
 
     private final LanguagesRepository languagesRepository;
 
-    public List<Languages> findAll() {
-        return languagesRepository.findAll();
+    public List<LanguagesResponse> findAll() {
+        return languagesRepository.findAll().stream().map(this::convertToLanguagesResponse).toList();
+    }
+
+    public LanguagesResponse findById(Long id) {
+        return convertToLanguagesResponse(languagesRepository.findById(id).orElseThrow());
+    }
+
+    public Long delete(Long id) {
+        Languages languages = languagesRepository.findById(id).orElseThrow();
+        languages.setStatus(false);
+        languagesRepository.save(languages);
+        return id;
+    }
+
+    public LanguagesResponse create(LanguagesRequest languagesRequest) {
+        Languages languages = new Languages();
+        languages.setCode(languagesRequest.code());
+        languages.setName(languagesRequest.name());
+        languages.setStatus(languagesRequest.status());
+        return convertToLanguagesResponse(languagesRepository.save(languages));
+    }
+
+    public LanguagesResponse update(Long id, LanguagesRequest languagesRequest) {
+        Languages languages = languagesRepository.findById(id).orElseThrow();
+        languages.setCode(languagesRequest.code());
+        languages.setName(languagesRequest.name());
+        languages.setStatus(languagesRequest.status());
+        return convertToLanguagesResponse(languagesRepository.save(languages));
+    }
+
+    public LanguagesResponse convertToLanguagesResponse(Languages languages) {
+        return new LanguagesResponse(languages.getId(), languages.getCode(), languages.getName(), languages.getStatus());
     }
 }

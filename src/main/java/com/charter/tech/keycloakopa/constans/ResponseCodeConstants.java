@@ -11,6 +11,8 @@ public class ResponseCodeConstants {
     public static final String VAL_COMMON_METHOD_NOT_ALLOWED = "VAL_COMMON_METHOD_NOT_ALLOWED";
     public static final String VAL_COMMON_ENDPOINT_NOT_FOUND = "VAL_COMMON_ENDPOINT_NOT_FOUND";
     public static final String VAL_COMMON_MEDIA_TYPE_NOT_SUPPORTED = "VAL_COMMON_MEDIA_TYPE_NOT_SUPPORTED";
+    public static final String VAL_ROLE_NOT_FOUND_ID = "VAL_ROLE_NOT_FOUND_ID";
+
     //Security error
     public static final String SEC_AUTH_INVALID_TOKEN = "SEC_AUTH_INVALID_TOKEN";
     public static final String SEC_AUTH_TOKEN_EXPIRED = "SEC_AUTH_TOKEN_EXPIRED";
