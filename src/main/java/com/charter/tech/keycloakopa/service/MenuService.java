@@ -1,8 +1,11 @@
 package com.charter.tech.keycloakopa.service;
 
+import com.charter.tech.keycloakopa.dto.MenuCrudResponse;
+import com.charter.tech.keycloakopa.dto.MenuRequest;
 import com.charter.tech.keycloakopa.dto.MenuResponse;
+import com.charter.tech.keycloakopa.entity.Menu;
+import com.charter.tech.keycloakopa.mappper.MenuMapper;
 import com.charter.tech.keycloakopa.repository.MenuRepository;
-import com.sun.net.httpserver.Headers;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
@@ -18,6 +21,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MenuService {
     private final MenuRepository menuRepository;
+    private final MenuMapper menuMapper;
     private final HttpServletRequest httpServletRequest;
 
     @Cacheable(value = "menu", cacheManager = "cacheManager")
@@ -48,5 +52,33 @@ public class MenuService {
             }
         }
         return roots;
+    }
+
+    public List<MenuCrudResponse> findAll() {
+        return menuRepository.findAll().stream().map(this::convertToMenuCrudResponse).toList();
+    }
+
+    public MenuCrudResponse findById(Long id) {
+        return convertToMenuCrudResponse(menuRepository.findById(id).orElseThrow());
+    }
+
+    public Long delete(Long id) {
+        menuRepository.deleteById(id);
+        return id;
+    }
+
+    public MenuCrudResponse create(MenuRequest menuRequest) {
+        Menu menu = menuMapper.toEntityCreate(menuRequest);
+        return convertToMenuCrudResponse(menuRepository.save(menu));
+    }
+
+    public MenuCrudResponse update(Long id, MenuRequest menuRequest) {
+        Menu menu = menuRepository.findById(id).orElseThrow();
+        menuMapper.toEntityUpdate(menuRequest, menu);
+        return convertToMenuCrudResponse(menuRepository.save(menu));
+    }
+
+    public MenuCrudResponse convertToMenuCrudResponse(Menu menu) {
+        return menuMapper.toResponse(menu);
     }
 }

@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 @Entity
 @Table(
@@ -22,11 +21,15 @@ public class Permission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false, length = 100)
-    private String code;
-    private String resource;
-    private String action;
+    private String name;
+    private String description;
     @ManyToMany(mappedBy = "permissions")
     private Set<Role> roles = new HashSet<>();
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "permissions_copes",
+            joinColumns = @JoinColumn(name = "rmission_id"),
+            inverseJoinColumns = @JoinColumn(name = "scopes_id")
+    )
+    private Set<Scopes> scopes = new HashSet<>();
 }

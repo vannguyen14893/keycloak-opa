@@ -5,17 +5,20 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
-@Table(name = "permission_scopes")
+@Table(name = "scopes")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PermissionScopes {
+public class Scopes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long roleId;
-    private Long permissionId;
-    private Long scopeId;
-    private String scopeValue;
+    private String name;
+    private String description;
+    @ManyToMany(mappedBy = "scopes")
+    private Set<Permission> permissions = new HashSet<>();
 }

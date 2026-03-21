@@ -3,6 +3,7 @@ package com.charter.tech.keycloakopa.service;
 import com.charter.tech.keycloakopa.dto.LanguagesRequest;
 import com.charter.tech.keycloakopa.dto.LanguagesResponse;
 import com.charter.tech.keycloakopa.entity.Languages;
+import com.charter.tech.keycloakopa.mappper.LanguagesMapper;
 import com.charter.tech.keycloakopa.repository.LanguagesRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import java.util.List;
 public class LanguagesService {
 
     private final LanguagesRepository languagesRepository;
+    private final LanguagesMapper languagesMapper;
 
     public List<LanguagesResponse> findAll() {
         return languagesRepository.findAll().stream().map(this::convertToLanguagesResponse).toList();
@@ -31,22 +33,17 @@ public class LanguagesService {
     }
 
     public LanguagesResponse create(LanguagesRequest languagesRequest) {
-        Languages languages = new Languages();
-        languages.setCode(languagesRequest.code());
-        languages.setName(languagesRequest.name());
-        languages.setStatus(languagesRequest.status());
+        Languages languages = languagesMapper.toEntityCreate(languagesRequest);
         return convertToLanguagesResponse(languagesRepository.save(languages));
     }
 
     public LanguagesResponse update(Long id, LanguagesRequest languagesRequest) {
         Languages languages = languagesRepository.findById(id).orElseThrow();
-        languages.setCode(languagesRequest.code());
-        languages.setName(languagesRequest.name());
-        languages.setStatus(languagesRequest.status());
+        languagesMapper.toEntityUpdate(languagesRequest, languages);
         return convertToLanguagesResponse(languagesRepository.save(languages));
     }
 
     public LanguagesResponse convertToLanguagesResponse(Languages languages) {
-        return new LanguagesResponse(languages.getId(), languages.getCode(), languages.getName(), languages.getStatus());
+        return languagesMapper.toResponse(languages);
     }
 }

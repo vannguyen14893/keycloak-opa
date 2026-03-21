@@ -2,7 +2,6 @@ package com.charter.tech.keycloakopa.controller;
 
 import com.charter.tech.keycloakopa.dto.*;
 import com.charter.tech.keycloakopa.service.ErrorCatalogService;
-import com.charter.tech.keycloakopa.service.LanguagesService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
