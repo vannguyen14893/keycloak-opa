@@ -18,7 +18,6 @@ import java.util.List;
 @RequestMapping("/v1/role")
 public class RoleController extends BaseController {
     private final RoleService roleService;
-    @Operation(summary = "messages.get.roles.summary", description = "messages.get.roles.desc")
     @GetMapping()
     public ResponseEntity<SuccessResultResponse<List<RoleResponse>>> getListRole() {
         return execute(roleService.findAll());
