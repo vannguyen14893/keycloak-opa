@@ -3,17 +3,22 @@ package com.charter.tech.keycloakopa.service;
 import com.charter.tech.keycloakopa.config.DBMessageSourceConfig;
 import com.charter.tech.keycloakopa.constans.MessageConstants;
 import com.charter.tech.keycloakopa.constans.ResponseCodeConstants;
+import com.charter.tech.keycloakopa.dto.RolePermissionResponse;
 import com.charter.tech.keycloakopa.dto.RoleRequest;
 import com.charter.tech.keycloakopa.dto.RoleResponse;
+import com.charter.tech.keycloakopa.entity.Permission;
 import com.charter.tech.keycloakopa.entity.Role;
+import com.charter.tech.keycloakopa.entity.Scopes;
 import com.charter.tech.keycloakopa.exception.BusinessExceptionHandler;
 import com.charter.tech.keycloakopa.mappper.RoleMapper;
 import com.charter.tech.keycloakopa.repository.RoleRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +34,24 @@ public class RoleService {
     public RoleResponse findById(Long id) {
         String messages = dbMessageSourceConfig.getMessages(MessageConstants.VAL_ROLE_NOT_FOUND_ID, new Object[]{id}, httpServletRequest.getLocale());
         return convertToRoleResponse(roleRepository.findById(id).orElseThrow(() -> new BusinessExceptionHandler(ResponseCodeConstants.VAL_ROLE_NOT_FOUND_ID, messages)));
+    }
+
+    @Cacheable(value = "rolePermissions", cacheManager = "cacheManager")
+    public List<RolePermissionResponse> findByCode(String code) {
+        List<Role> roles = roleRepository.findByCode(code);
+        List<RolePermissionResponse> rolePermissionResponses =new ArrayList<>();
+        Map<String,List<String>> mapPermissions = new HashMap<>();
+        for (Role  role: roles){
+            Set<Permission> rolePermissions = role.getPermissions();
+            for (Permission permission: rolePermissions){
+                Set<Scopes> scopes = permission.getScopes();
+                List<String> scopeNames = scopes.stream().map(Scopes::getName).toList();
+                mapPermissions.put(permission.getName(),scopeNames);
+            }
+            RolePermissionResponse rolePermissionResponse = new RolePermissionResponse(role.getCode(),mapPermissions);
+            rolePermissionResponses.add(rolePermissionResponse);
+        }
+        return rolePermissionResponses;
     }
 
     public Long delete(Long id) {

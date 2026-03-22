@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 public class CaffeineCacheConfig {
     @Bean
     public CaffeineCacheManager cacheManager() {
-        CaffeineCacheManager manager = new CaffeineCacheManager("errorCatalog", "languageDetails", "menu");
+        CaffeineCacheManager manager = new CaffeineCacheManager("rolePermissions","errorCatalog", "languageDetails", "menu");
         Caffeine<Object, Object> objectCaffeine = Caffeine.newBuilder()
                 .maximumSize(1000)
                 .expireAfterWrite(2, TimeUnit.MINUTES)

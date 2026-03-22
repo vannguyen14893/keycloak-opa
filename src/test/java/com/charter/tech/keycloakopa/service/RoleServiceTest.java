@@ -5,7 +5,10 @@ import com.charter.tech.keycloakopa.constans.MessageConstants;
 import com.charter.tech.keycloakopa.constans.ResponseCodeConstants;
 import com.charter.tech.keycloakopa.dto.RoleRequest;
 import com.charter.tech.keycloakopa.dto.RoleResponse;
+import com.charter.tech.keycloakopa.dto.RolePermissionResponse;
 import com.charter.tech.keycloakopa.entity.Role;
+import com.charter.tech.keycloakopa.entity.Permission;
+import com.charter.tech.keycloakopa.entity.Scopes;
 import com.charter.tech.keycloakopa.exception.BusinessExceptionHandler;
 import com.charter.tech.keycloakopa.mappper.RoleMapper;
 import com.charter.tech.keycloakopa.repository.RoleRepository;
@@ -19,7 +22,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -46,6 +52,8 @@ class RoleServiceTest {
     private Role role;
     private RoleRequest roleRequest;
     private RoleResponse roleResponse;
+    private Permission permission;
+    private Scopes scope;
 
     @BeforeEach
     void setUp() {
@@ -57,6 +65,17 @@ class RoleServiceTest {
         roleRequest = new RoleRequest("ADMIN", "Administrator");
 
         roleResponse = new RoleResponse(1L, "ADMIN", "Administrator");
+
+        permission = new Permission();
+        permission.setName("READ_USER");
+        scope = new Scopes();
+        scope.setName("read");
+        Set<Scopes> scopes = new HashSet<>();
+        scopes.add(scope);
+        permission.setScopes(scopes);
+        Set<Permission> permissions = new HashSet<>();
+        permissions.add(permission);
+        role.setPermissions(permissions);
     }
 
     @Test
@@ -179,5 +198,22 @@ class RoleServiceTest {
         // Then
         assertEquals(roleResponse, result);
         verify(roleMapper).toResponse(role);
+    }
+
+    @Test
+    void findByCode_shouldReturnListOfRolePermissionResponses() {
+        // Given
+        when(roleRepository.findByCode("ADMIN")).thenReturn(List.of(role));
+
+        // When
+        List<RolePermissionResponse> result = roleService.findByCode("ADMIN");
+
+        // Then
+        assertEquals(1, result.size());
+        RolePermissionResponse response = result.get(0);
+        assertEquals("ADMIN", response.roleName());
+        Map<String, List<String>> expectedPermissions = Map.of("READ_USER", List.of("read"));
+        assertEquals(expectedPermissions, response.permissions());
+        verify(roleRepository).findByCode("ADMIN");
     }
 }

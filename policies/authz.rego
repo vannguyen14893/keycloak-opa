@@ -2,7 +2,7 @@ package authz
 
 default allow = false
 
-role_permissions := {
+role_permissions_test := {
     "ROLE_ADMIN": {
         "products": ["create", "read", "update", "delete", "publish", "unpublish", "archive"],
         "categories": ["create", "read", "update", "delete"],
@@ -87,6 +87,6 @@ allow if {
 }
 
 # Helper: Check if role has permission
-user_has_permission(role, resource, action) if {
+user_has_permission(role, resource, action,role_permissions) if {
     role_permissions[role][resource][_] == action
 }
