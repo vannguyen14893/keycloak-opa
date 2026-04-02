@@ -35,7 +35,7 @@ public class UserController extends BaseController {
         return execute(new UserDto("admin", "admin"));
     }
 
-    //@OPAAuthorize(resource = "users", action = "create")
+    @OPAAuthorize(resource = "users", action = "create")
     @PostMapping("users")
     public ResponseEntity<SuccessResultResponse<List<UserDto>>> admin(@RequestBody @Valid UserDto user) {
         log.info("cardNumber: {}, email: {}, password: {}, phone: {} ", "4111-1111-1111-1111", "ducvan14893@gmail.com", "123456789", "0123456789");

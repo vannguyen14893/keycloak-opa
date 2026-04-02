@@ -30,6 +30,4 @@
             <appender-ref ref="JSON_CONSOLE"/>
         </root>
     </springProfile>
-    <logger name="org.springdoc" level="OFF"/>
-    <logger name="io.swagger" level="OFF"/>
 </configuration>

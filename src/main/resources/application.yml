@@ -48,3 +48,6 @@ management:
     metrics:
       export:
         enabled: off
+app:
+  opa:
+    base-url: http://localhost:8181

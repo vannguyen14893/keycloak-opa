@@ -7,9 +7,9 @@ import org.springframework.web.service.annotation.PostExchange;
 
 import java.util.Map;
 
-@HttpExchange("/v1")
+@HttpExchange()
 public interface OpaClient {
-    @PostExchange(value = "/data/authz/allow", accept = "application/json")
+    @PostExchange(value = "/v1/data/authz/allow", accept = "application/json")
     OpaResponse allow(@RequestBody Map<String, Object> input);
 }
 
