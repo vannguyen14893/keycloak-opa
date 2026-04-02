@@ -1,6 +1,4 @@
 package com.charter.tech.keycloakopa;
-
-import com.charter.tech.keycloakopa.dto.RoleResponse;
 import com.charter.tech.keycloakopa.entity.LanguagesDetail;
 import com.charter.tech.keycloakopa.service.LanguagesDetailService;
 import com.charter.tech.keycloakopa.service.PiiRuleService;
@@ -9,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.resilience.annotation.EnableResilientMethods;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.util.*;
@@ -22,6 +21,7 @@ import static com.charter.tech.keycloakopa.config.MaskingConverterLogConfig.PII_
 @Slf4j
 @EnableScheduling
 @RequiredArgsConstructor
+@EnableResilientMethods
 public class KeycloakOpaApplication {
 
     private final PiiRuleService piiRuleService;

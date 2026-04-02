@@ -12,7 +12,6 @@ import java.util.Set;
 
 public class TurboFilterLogConfig extends TurboFilter {
     public static final Set<String> HEALTH_URL = new HashSet<>(Set.of("/actuator/health"));
-    private String mdcKey = "requestUri";
 
     @Override
     public FilterReply decide(
@@ -22,7 +21,7 @@ public class TurboFilterLogConfig extends TurboFilter {
             String format,
             Object[] params,
             Throwable t) {
-        String requestURI = MDC.get(mdcKey);
+        String requestURI = MDC.get("requestUri");
         if (requestURI != null && HEALTH_URL.contains(requestURI)) {
             return FilterReply.DENY;
         }

@@ -1,9 +1,7 @@
 package com.charter.tech.keycloakopa.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -11,9 +9,10 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "roles")
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class Role {
 
     @Id
@@ -26,7 +25,7 @@ public class Role {
     @Column(nullable = false)
     private String name;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany
     @JoinTable(
             name = "role_permissions",
             joinColumns = @JoinColumn(name = "role_id"),

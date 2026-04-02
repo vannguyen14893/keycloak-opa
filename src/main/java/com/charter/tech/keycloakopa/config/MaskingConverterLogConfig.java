@@ -16,7 +16,7 @@ public class MaskingConverterLogConfig extends MessageConverter {
         return maskSensitiveData(message);
     }
 
-    private String maskSensitiveData(String input) {
+    public String maskSensitiveData(String input) {
         StringBuilder result = new StringBuilder(input.length());
         int i = 0;
 

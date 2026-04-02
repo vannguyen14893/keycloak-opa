@@ -17,6 +17,16 @@ spring:
     open-in-view: off
   liquibase:
     change-log: classpath:/db/changelog/db.changelog-master.xml
+    enabled: off
+  threads:
+    virtual:
+      enabled: true
+#  main:
+#    lazy-initialization: false
+#  data:
+#    jpa:
+#      repositories:
+#        bootstrap-mode: lazy
 springdoc:
   swagger-ui:
     syntax-highlight:
@@ -34,3 +44,7 @@ management:
     web:
       exposure:
         include: "*"
+  otlp:
+    metrics:
+      export:
+        enabled: off

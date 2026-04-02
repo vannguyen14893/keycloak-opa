@@ -1,9 +1,7 @@
 package com.charter.tech.keycloakopa.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -13,7 +11,8 @@ import java.util.Set;
         name = "permissions",
         uniqueConstraints = @UniqueConstraint(columnNames = "code")
 )
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Permission {
@@ -25,10 +24,10 @@ public class Permission {
     private String description;
     @ManyToMany(mappedBy = "permissions")
     private Set<Role> roles = new HashSet<>();
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany
     @JoinTable(
             name = "permissions_copes",
-            joinColumns = @JoinColumn(name = "rmission_id"),
+            joinColumns = @JoinColumn(name = "permission_id"),
             inverseJoinColumns = @JoinColumn(name = "scopes_id")
     )
     private Set<Scopes> scopes = new HashSet<>();

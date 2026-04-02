@@ -4,6 +4,7 @@ import com.charter.tech.keycloakopa.config.DBMessageSourceConfig;
 import com.charter.tech.keycloakopa.constans.MessageConstants;
 import com.charter.tech.keycloakopa.constans.ResponseCodeConstants;
 import com.charter.tech.keycloakopa.dto.SuccessResultResponse;
+import io.micrometer.tracing.Tracer;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ public class BaseController {
     DBMessageSourceConfig dbMessageSourceConfig;
     @Autowired
     HttpServletRequest httpServletRequest;
+    @Autowired
+    private Tracer tracer;
 
     /**
      * Creates a ResponseEntity with a ResponseSuccess wrapper for single response objects.
@@ -30,6 +33,7 @@ public class BaseController {
     public <T> ResponseEntity<SuccessResultResponse<T>> execute(T response) {
         var locale = httpServletRequest.getLocale();
         String messages = dbMessageSourceConfig.getMessages(MessageConstants.MESSAGE_SUCCESS, null, locale);
-        return new ResponseEntity<>(new SuccessResultResponse<>(MDC.get("trace_id"), ResponseCodeConstants.CODE_SUCCESS, messages, response), HttpStatusCode.valueOf(200));
+        String traceId = tracer.currentSpan().context().traceId();
+        return new ResponseEntity<>(new SuccessResultResponse<>(traceId, ResponseCodeConstants.CODE_SUCCESS, messages, response), HttpStatusCode.valueOf(200));
     }
 }

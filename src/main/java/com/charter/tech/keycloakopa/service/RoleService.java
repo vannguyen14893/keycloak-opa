@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -37,6 +38,7 @@ public class RoleService {
     }
 
     @Cacheable(value = "rolePermissions", cacheManager = "cacheManager")
+    @Transactional(readOnly = true)
     public List<RolePermissionResponse> findByCode(String code) {
         List<Role> roles = roleRepository.findByCode(code);
         List<RolePermissionResponse> rolePermissionResponses =new ArrayList<>();
@@ -70,7 +72,21 @@ public class RoleService {
         roleMapper.toEntityUpdate(roleRequest, role);
         return convertToRoleResponse(roleRepository.save(role));
     }
-
+    public static String crc16(String data) {
+        int crc = 0xFFFF;
+        for (char c : data.toCharArray()) {
+            crc ^= (c << 8);
+            for (int i = 0; i < 8; i++) {
+                if ((crc & 0x8000) != 0) {
+                    crc = (crc << 1) ^ 0x1021;
+                } else {
+                    crc <<= 1;
+                }
+            }
+        }
+        crc &= 0xFFFF;
+        return String.format("%04X", crc);
+    }
     public RoleResponse convertToRoleResponse(Role role) {
         return roleMapper.toResponse(role);
     }

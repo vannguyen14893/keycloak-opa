@@ -4,7 +4,6 @@ import com.charter.tech.keycloakopa.constans.Constants;
 import com.charter.tech.keycloakopa.dto.ErrorCatalogRequest;
 import com.charter.tech.keycloakopa.dto.ErrorCatalogResponse;
 import com.charter.tech.keycloakopa.entity.ErrorCatalog;
-import com.charter.tech.keycloakopa.entity.LanguagesDetail;
 import com.charter.tech.keycloakopa.mappper.ErrorCatalogMapper;
 import com.charter.tech.keycloakopa.repository.ErrorCatalogRepository;
 import lombok.RequiredArgsConstructor;

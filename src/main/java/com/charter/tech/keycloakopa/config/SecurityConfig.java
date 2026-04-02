@@ -39,11 +39,11 @@ public class SecurityConfig {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/actuator/**","/users/**","/v1/role/**",
+                        .requestMatchers("/actuator/**","/users/**",
                                 "/swagger-translations/**",
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
-                                "/v3/api-docs/**").permitAll()
+                                "/v3/api-docs/**","/startup-report/**").permitAll()
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .authenticationEntryPoint(customAuthenticationEntryPoint)

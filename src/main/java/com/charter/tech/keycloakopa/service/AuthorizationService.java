@@ -5,6 +5,8 @@ import com.charter.tech.keycloakopa.constans.ResponseCodeConstants;
 import com.charter.tech.keycloakopa.dto.RolePermissionResponse;
 import com.charter.tech.keycloakopa.exception.CustomAccessDeniedException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.resilience.annotation.ConcurrencyLimit;
+import org.springframework.resilience.annotation.Retryable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,28 +23,35 @@ public class AuthorizationService {
     private final OpaClient opaClient;
 
     private final RoleService roleService;
-
+    @Retryable(maxRetries = 2, delay = 5000, multiplier = 2, maxDelay = 7000,excludes = CustomAccessDeniedException.class)
+    @ConcurrencyLimit(3)
     public void authorize(String resource, String action) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) throw new CustomAccessDeniedException(ResponseCodeConstants.SEC_AUTH_REQUIRED);
-        List<String> userRoles = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).filter(role -> role != null && role.startsWith("ROLE_")).toList();
+        List<String> userRoles = authentication.getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .filter(role -> role != null && role.startsWith("ROLE_"))
+                .collect(Collectors.toList());
         if (userRoles.isEmpty()) throw new CustomAccessDeniedException(ResponseCodeConstants.SEC_ROLE_REQUIRED);
-        List<RolePermissionResponse> rolePermissionResponses = roleService.findByCode(userRoles.getFirst());
+
+        String userRole = userRoles.get(0);
+
+        List<RolePermissionResponse> rolePermissionResponses = roleService.findByCode(userRole);
         Map<String, Object> request = Map.of(
                 "input", Map.of(
                         "user", Map.of(
-                                "role", userRoles.getFirst()
+                                "role", userRole
                         ),
                         "resource", resource,
                         "action", action,
-                        "role_permissions",rolePermissionResponses
+                        "role_permissions", rolePermissionResponses
 
                 )
         );
-        boolean allowed = opaClient.allow(request);
+        boolean allowed = opaClient.allow(request).isResult();
         if (!allowed) {
             throw new CustomAccessDeniedException(ResponseCodeConstants.SEC_PERMISSION_DENIED);
         }
     }
 }
-
