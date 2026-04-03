@@ -35,11 +35,11 @@ public class LogService {
         http.put("method", request.getMethod().name());
         http.put("uri", request.getURI().toString());
         http.put("requestHeaders", getMaskedHeaders(request.getHeaders().toSingleValueMap()));
-        http.put("requestBody", getRequestBody(requestBody));
+        http.put("requestBody", getContentBody(requestBody));
 
         if (response != null) {
             http.put("status", response.getStatusCode().value());
-            http.put("responseBody", getResponseBody(response.getBody().readAllBytes()));
+            http.put("responseBody", getContentBody(response.getBody().readAllBytes()));
         }
 
         if (error != null) {
@@ -89,12 +89,12 @@ public class LogService {
         http.put("query", request.getQueryString());
         http.put("clientIp", getClientIp(request));
         http.put("requestHeaders", getMaskedHeaders(request));
-        http.put("requestBody", getRequestBody(request.getContentAsByteArray()));
+        http.put("requestBody", getContentBody(request.getContentAsByteArray()));
 
         // --- Response fields ---
         http.put("status", status);
         http.put("durationMs", duration);
-        http.put("responseBody", getResponseBody(response.getContentAsByteArray()));
+        http.put("responseBody", getContentBody(response.getContentAsByteArray()));
 
         // Log level based on status
         if (status >= 500) {
@@ -120,17 +120,7 @@ public class LogService {
         return headers;
     }
 
-    public String getRequestBody(byte[] content) {
-        if (content.length == 0) return null;
-        if (content.length > MAX_BODY_SIZE) return "[too large: " + content.length + " bytes]";
-        try {
-            return maskSensitiveFields(new String(content, StandardCharsets.UTF_8));
-        } catch (Exception e) {
-            return "[unreadable]";
-        }
-    }
-
-    private String getResponseBody(byte[] content) {
+    public String getContentBody(byte[] content) {
         if (content.length == 0) return null;
         if (content.length > MAX_BODY_SIZE) return "[too large: " + content.length + " bytes]";
         try {
