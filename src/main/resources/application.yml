@@ -38,7 +38,7 @@ springdoc:
     - en_US
   pre-loading-enabled: true
 server:
-  port: 8081
+  port: 8082
 management:
   endpoints:
     web:

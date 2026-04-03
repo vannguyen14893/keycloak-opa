@@ -1,5 +1,4 @@
 package com.charter.tech.keycloakopa.config;
-
 import com.charter.tech.keycloakopa.client.OpaClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -16,21 +15,11 @@ import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 public class HttpClientConfig {
     private final LoggingInterceptor loggingInterceptor;
 
-//    @Bean
-//    public RestClient restClient() {
-//        ClientHttpRequestFactory factory =
-//                new BufferingClientHttpRequestFactory(new SimpleClientHttpRequestFactory());
-//        return RestClient.builder()
-//                .requestFactory(factory)
-//                .requestInterceptor(new LoggingInterceptor())
-//                .build();
-//    }
-
     @Bean
     public OpaClient opaClient() {
         ClientHttpRequestFactory clientHttpRequestFactory =
                 new BufferingClientHttpRequestFactory(new SimpleClientHttpRequestFactory());
-        RestClient restClient = RestClient.builder().baseUrl("http://localhost:8181")
+        RestClient restClient = RestClient.builder().baseUrl("http://localhost:8082")
                 .requestFactory(clientHttpRequestFactory)
                 .requestInterceptor(loggingInterceptor)
                 .build();

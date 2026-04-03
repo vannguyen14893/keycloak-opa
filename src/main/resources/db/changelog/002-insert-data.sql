@@ -1,17 +1,17 @@
 --liquibase formatted sql
 
 --changeset liquibase:1
-INSERT INTO public.error_catalog VALUES (7, 'BIZ_USER_001', 400, 'data.not.found', 'USER-SERVICE', 'BUSINESS', false, 'WARN');
-INSERT INTO public.error_catalog VALUES (2, 'VAL_COMMON_PARAM_TYPE', 400, 'invalid.param.type', 'USER-SERVICE', 'VALIDATION', false, 'WARN');
-INSERT INTO public.error_catalog VALUES (3, 'VAL_COMMON_METHOD_NOT_ALLOWED', 405, 'http.method.not.supported', 'USER-SERVICE', 'VALIDATION', false, 'WARN');
-INSERT INTO public.error_catalog VALUES (4, 'VAL_COMMON_ENDPOINT_NOT_FOUND', 404, 'endpoint.not.found', 'USER-SERVICE', 'VALIDATION', false, 'WARN');
-INSERT INTO public.error_catalog VALUES (5, 'VAL_COMMON_MEDIA_TYPE_NOT_SUPPORTED', 415, 'media.type.not.supported', 'USER-SERVICE', 'VALIDATION', false, 'WARN');
-INSERT INTO public.error_catalog VALUES (6, 'SYS_COMMON_001', 500, 'system.error', 'USER-SERVICE', 'SYSTEMS', false, 'ERROR');
-INSERT INTO public.error_catalog VALUES (9, 'SEC_ROLE_REQUIRED', 403, 'sec.role.required', 'USER-SERVICE', 'SECURITY', false, 'WARN');
-INSERT INTO public.error_catalog VALUES (10, 'SEC_AUTH_REQUIRED', 401, 'sec.auth.required', 'USER-SERVICE', 'SECURITY', false, 'WARN');
-INSERT INTO public.error_catalog VALUES (11, 'SEC_AUTH_INVALID_TOKEN', 401, 'sec.auth.token.invalid', 'USER-SERVICE', 'SECURITY', false, 'WARN');
-INSERT INTO public.error_catalog VALUES (8, 'SEC_PERMISSION_DENIED', 403, 'sec.permission.denied', 'USER-SERVICE', 'SECURITY', false, 'WARN');
-INSERT INTO public.error_catalog VALUES (1, 'VAL_USER_001', 400, 'validation.error', 'USER-SERVICE', 'VALIDATION', false, 'WARN');
+INSERT INTO public.error_catalog VALUES (7, 'BIZ_USER_001', 400, 'data.not.found', false, 'USER-SERVICE', 'BUSINESS', 'WARN');
+INSERT INTO public.error_catalog VALUES (2, 'VAL_COMMON_PARAM_TYPE', 400, 'invalid.param.type', false ,'USER-SERVICE', 'VALIDATION',  'WARN');
+INSERT INTO public.error_catalog VALUES (3, 'VAL_COMMON_METHOD_NOT_ALLOWED', 405, 'http.method.not.supported', false, 'USER-SERVICE', 'VALIDATION',  'WARN');
+INSERT INTO public.error_catalog VALUES (4, 'VAL_COMMON_ENDPOINT_NOT_FOUND', 404, 'endpoint.not.found', false ,'USER-SERVICE', 'VALIDATION',  'WARN');
+INSERT INTO public.error_catalog VALUES (5, 'VAL_COMMON_MEDIA_TYPE_NOT_SUPPORTED', 415, 'media.type.not.supported',false , 'USER-SERVICE', 'VALIDATION',  'WARN');
+INSERT INTO public.error_catalog VALUES (6, 'SYS_COMMON_001', 500, 'system.error', false ,'USER-SERVICE', 'SYSTEMS', 'ERROR');
+INSERT INTO public.error_catalog VALUES (9, 'SEC_ROLE_REQUIRED', 403, 'sec.role.required', false ,'USER-SERVICE', 'SECURITY',  'WARN');
+INSERT INTO public.error_catalog VALUES (10, 'SEC_AUTH_REQUIRED', 401, 'sec.auth.required',false , 'USER-SERVICE', 'SECURITY',  'WARN');
+INSERT INTO public.error_catalog VALUES (11, 'SEC_AUTH_INVALID_TOKEN', 401, 'sec.auth.token.invalid',false , 'USER-SERVICE', 'SECURITY',  'WARN');
+INSERT INTO public.error_catalog VALUES (8, 'SEC_PERMISSION_DENIED', 403, 'sec.permission.denied',false , 'USER-SERVICE', 'SECURITY', 'WARN');
+INSERT INTO public.error_catalog VALUES (1, 'VAL_USER_001', 400, 'validation.error', false ,'USER-SERVICE', 'VALIDATION',  'WARN');
 
 INSERT INTO public.languages VALUES (1, 'vn', 'Việt Nam', true);
 INSERT INTO public.languages VALUES (2, 'en', 'English', true);

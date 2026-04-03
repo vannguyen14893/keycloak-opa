@@ -1,40 +1,38 @@
 package com.charter.tech.keycloakopa.config;
 
 import com.charter.tech.keycloakopa.service.LogService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.MDC;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.util.ContentCachingRequestWrapper;
-import org.springframework.web.util.ContentCachingResponseWrapper;
+
 import java.io.IOException;
+
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class LoggingInterceptor implements ClientHttpRequestInterceptor {
-    @Autowired
-    private LogService logService;
+    private final LogService logService;
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
-        if (logService.shouldSkip(request.getURI().getPath())) {
-            return execution.execute(request, body);
+        long start = System.nanoTime();
+        ClientHttpResponse response = null;
+        try {
+            response = execution.execute(request, body);
+            BufferingClientHttpResponseWrapper buffered = new BufferingClientHttpResponseWrapper(response);
+            long durationMs = (System.nanoTime() - start) / 1_000_000;
+            logService.logCombined(request, body, buffered, durationMs, null);
+            return buffered;
+        } catch (Exception ex) {
+            long durationMs = (System.nanoTime() - start) / 1_000_000;
+            logService.logCombined(request, body, null, durationMs, ex);
+            throw ex;
         }
-        long startTime = System.currentTimeMillis();
-        ClientHttpResponse response = execution.execute(request, body);
-        ServletRequestAttributes attrs =
-                (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper(attrs.getRequest(),0);
-        ContentCachingResponseWrapper wrappedResponse = new ContentCachingResponseWrapper(attrs.getResponse());
-        long duration = System.currentTimeMillis() - startTime;
-        logService.logCombined(wrappedRequest, wrappedResponse, duration);
-        //MDC.clear();
-        return response;
     }
+
+
+
 }

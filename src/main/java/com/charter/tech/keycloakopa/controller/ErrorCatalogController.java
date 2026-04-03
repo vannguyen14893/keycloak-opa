@@ -17,13 +17,13 @@ public class ErrorCatalogController extends BaseController {
 
     private final ErrorCatalogService errorCatalogService;
 
-    @OPAAuthorize(resource = "error-catalog", action = "read")
+    //@OPAAuthorize(resource = "error-catalog", action = "read")
     @GetMapping()
     public ResponseEntity<SuccessResultResponse<List<ErrorCatalogResponse>>> getListErrorCatalog(@RequestParam int page, @RequestParam int size) {
         return execute(errorCatalogService.findAll(page, size));
     }
 
-    @OPAAuthorize(resource = "error-catalog", action = "read")
+    //@OPAAuthorize(resource = "error-catalog", action = "read")
     @GetMapping(path = "/{id}")
     public ResponseEntity<SuccessResultResponse<ErrorCatalogResponse>> findErrorCatalogById(@PathVariable Long id) {
         return execute(errorCatalogService.findById(id));
