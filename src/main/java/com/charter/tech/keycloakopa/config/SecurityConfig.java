@@ -28,11 +28,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final LoggingFilterConfig loggingFilterConfig;
+    private final LoggingInboundConfig loggingInboundConfig;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, CustomAuthenticationEntryPoint customAuthenticationEntryPoint) throws Exception {
-        http.addFilterBefore(loggingFilterConfig,
+        http.addFilterBefore(loggingInboundConfig,
                 UsernamePasswordAuthenticationFilter.class);
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
@@ -43,7 +43,6 @@ public class SecurityConfig {
                                 "/swagger-translations/**",
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
-                                "/v1/error-catalog/**",
                                 "/v3/api-docs/**","/startup-report/**").permitAll()
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2

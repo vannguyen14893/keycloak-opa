@@ -29,13 +29,13 @@ public class ErrorCatalogController extends BaseController {
         return execute(errorCatalogService.findById(id));
     }
 
-    @OPAAuthorize(resource = "error-catalog", action = "delete")
+    //@OPAAuthorize(resource = "error-catalog", action = "delete")
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<SuccessResultResponse<Long>> delete(@PathVariable Long id) {
         return execute(errorCatalogService.delete(id));
     }
 
-    @OPAAuthorize(resource = "error-catalog", action = "create")
+   // @OPAAuthorize(resource = "error-catalog", action = "create")
     @PostMapping()
     public ResponseEntity<SuccessResultResponse<ErrorCatalogResponse>> create(@RequestBody @Valid ErrorCatalogRequest errorCatalogRequest) {
         return execute(errorCatalogService.create(errorCatalogRequest));

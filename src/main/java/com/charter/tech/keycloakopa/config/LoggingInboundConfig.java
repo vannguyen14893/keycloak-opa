@@ -18,7 +18,7 @@ import java.io.IOException;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class LoggingFilterConfig extends OncePerRequestFilter {
+public class LoggingInboundConfig extends OncePerRequestFilter {
 
     private final LogService logService;
 

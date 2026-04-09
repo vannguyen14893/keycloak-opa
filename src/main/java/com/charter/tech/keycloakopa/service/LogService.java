@@ -1,9 +1,11 @@
 package com.charter.tech.keycloakopa.service;
 
 import com.charter.tech.keycloakopa.config.BufferingClientHttpResponseWrapper;
+import com.charter.tech.keycloakopa.constans.LogAttributeConstants;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import net.logstash.logback.argument.StructuredArguments;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.MDC;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Service;
@@ -82,8 +84,11 @@ public class LogService {
             long duration) {
 
         int status = response.getStatus();
+        if (StringUtils.isNotBlank(request.getHeader(LogAttributeConstants.TRACE_ID))) {
+            MDC.put(LogAttributeConstants.TRACE_ID, request.getHeader(LogAttributeConstants.TRACE_ID));
+        }
         Map<String, Object> http = new LinkedHashMap<>();
-        http.put("direction", "OUTBOUND");
+        http.put("direction", "INBOUND");
         http.put("method", request.getMethod());
         http.put("uri", request.getRequestURI());
         http.put("query", request.getQueryString());
@@ -95,7 +100,6 @@ public class LogService {
         http.put("status", status);
         http.put("durationMs", duration);
         http.put("responseBody", getContentBody(response.getContentAsByteArray()));
-
         // Log level based on status
         if (status >= 500) {
             log.error("HTTP {} {} -> {} ({}ms)",

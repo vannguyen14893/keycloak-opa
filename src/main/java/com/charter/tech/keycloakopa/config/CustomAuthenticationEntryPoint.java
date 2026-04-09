@@ -9,6 +9,7 @@ import com.charter.tech.keycloakopa.utils.Utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
@@ -22,13 +23,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 @Component
+@RequiredArgsConstructor
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
-    @Autowired
-    private Utils utils;
-    @Autowired
-    private DBMessageSourceConfig dbMessageSourceConfig;
-    @Autowired
-    private ErrorCatalogService errorCatalogService;
+    private final Utils utils;
+    private final DBMessageSourceConfig dbMessageSourceConfig;
+    private final ErrorCatalogService errorCatalogService;
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException ex) throws IOException {

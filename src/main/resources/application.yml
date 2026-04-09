@@ -5,6 +5,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/postgres
     username: admin
     password: 123456aA@
+    driver-class-name: io.opentelemetry.instrumentation.jdbc.OpenTelemetryDriver
   security:
     oauth2:
       resourceserver:
@@ -21,6 +22,8 @@ spring:
   threads:
     virtual:
       enabled: true
+  profiles:
+    active: prod
 #  main:
 #    lazy-initialization: false
 #  data:
@@ -38,7 +41,7 @@ springdoc:
     - en_US
   pre-loading-enabled: true
 server:
-  port: 8082
+  port: 8081
 management:
   endpoints:
     web:
@@ -48,6 +51,23 @@ management:
     metrics:
       export:
         enabled: off
+  observations:
+    annotations:
+      enabled: true
+  tracing:
+    sampling:
+      probability: 1.0
+    baggage:
+      enabled: false
+    propagation:
+      type: w3c
+  opentelemetry:
+    tracing:
+      export:
+        otlp:
+          endpoint: ${OTEL_EXPORTER_OTLP_ENDPOINT:http://localhost:4318/v1/traces}
+          transport: http
+otel
 app:
   opa:
-    base-url: http://localhost:8181
+    base-url: http://localhost:8082

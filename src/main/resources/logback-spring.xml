@@ -21,9 +21,8 @@
         <appender name="JSON_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
             <encoder class="net.logstash.logback.encoder.LogstashEncoder">
                 <includeCallerData>true</includeCallerData>
-                <jsonGeneratorDecorator class="net.logstash.logback.decorate.CompositeJsonGeneratorDecorator">
-                    <decorator class="net.logstash.logback.decorate.PrettyPrintingJsonGeneratorDecorator"/>
-                </jsonGeneratorDecorator>
+                <jsonGeneratorDecorator class="net.logstash.logback.decorate.CompositeJsonGeneratorDecorator"/>
+<!--                    <decorator class="net.logstash.logback.decorate.PrettyPrintingJsonGeneratorDecorator"/>-->
             </encoder>
         </appender>
         <root level="INFO">

@@ -14,7 +14,7 @@ import java.io.IOException;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class LoggingInterceptor implements ClientHttpRequestInterceptor {
+public class LoggingOutboundConfig implements ClientHttpRequestInterceptor {
     private final LogService logService;
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {

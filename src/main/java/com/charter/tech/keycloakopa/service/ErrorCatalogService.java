@@ -6,6 +6,7 @@ import com.charter.tech.keycloakopa.dto.ErrorCatalogResponse;
 import com.charter.tech.keycloakopa.entity.ErrorCatalog;
 import com.charter.tech.keycloakopa.mappper.ErrorCatalogMapper;
 import com.charter.tech.keycloakopa.repository.ErrorCatalogRepository;
+import io.micrometer.observation.annotation.Observed;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
@@ -38,7 +39,7 @@ public class ErrorCatalogService {
     public ErrorCatalogResponse findById(Long id) {
         return convertToErrorCatalogResponse(errorCatalogRepository.findById(id).orElseThrow());
     }
-
+    //@Observed(name = "error-catalog.create", contextualName = "creating-error-catalog")
     public ErrorCatalogResponse create(ErrorCatalogRequest errorCatalogRequest) {
         ErrorCatalog errorCatalog = errorCatalogMapper.toEntityCreate(errorCatalogRequest);
         return convertToErrorCatalogResponse(errorCatalogRepository.save(errorCatalog));
